@@ -1,8 +1,8 @@
 var grid = []
 var chunk
-var  chunkHeight = 16
+var  chunkHeight = 32
 var airCutoff = 5
-var stoneCutoff = 10
+var stoneCutoff = 35
 
 let cubeList = [] ;//ns stands for noise sensitivity
 let ns = 0.1
@@ -92,7 +92,7 @@ function buildChunk() {
             neighborX < 0 || neighborX >= chunkSize ||
             neighborY < 0 || neighborY >= chunkSize ||
             neighborZ < 0 || neighborZ >= chunkSize ||
-            grid[neighborZ]?.[neighborY]?.[neighborX] === "Air"
+            grid[neighborY]?.[neighborZ]?.[neighborX] === "Air"
           ) {
             AddFaceToGeometry(x, y, z, i, blk.sides[i]);
           }
@@ -143,6 +143,14 @@ function FillLayer(blockType,y){
     zGrid.push(xGrid);
   }
   return zGrid
+}
+function GetBlock(x,y,z){
+  var xPos = x*cs
+  var yPos = cs*round(4*noise(x*ns,z*ns))
+  var zPos = z * cs
+
+  if(yPos)
+
 }
 //this makes tree :)
 function GenTree(x,y,z){
