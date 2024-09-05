@@ -1,5 +1,8 @@
 var grid = []
 var chunk
+var  chunkHeight = 16
+var airCutoff = 5
+var stoneCutoff = 10
 
 let cubeList = [] ;//ns stands for noise sensitivity
 let ns = 0.1
@@ -36,18 +39,23 @@ function GenWorld(){
 function initializeChunk(){
   
   for (var y = 0 ; y < chunkSize ; y++){
-    //if (y < 6) 
-    var zGrid = []
+
+    //upper cutoff
+    if(y<airCutoff) {
+      grid.push(FillLayer("Air",y))
+      continue
+    }
+    //lower cutoff
+    else if (y > stoneCutoff){
+      grid.push(FillLayer(STONE,y))
+      continue
+    }
+    let zGrid = []
     for (var z = 0 ; z < chunkSize ; z++){
-      var xGrid = []
+      let xGrid = []
       for (var x = 0 ; x < chunkSize ; x++){
-        if (noise(x*0.1,z*0.1) < 0.9/y){
-          xGrid.push("Air")
-          continue
-        }
         
         let blockType = DIRT
-        if(y>4) blockType= STONE
         xGrid.push(new Block(
           x-chunkSize/2,y-chunkSize/2,z-chunkSize/2, blockType
         ))
@@ -55,9 +63,7 @@ function initializeChunk(){
       zGrid.push(xGrid)
     }
     grid.push(zGrid)
-  }
-  
-  grid[chunkSize-2][0][chunkSize-2] = "Air"
+    }
   
 }
 
@@ -71,10 +77,10 @@ function buildChunk() {
     { x: 0, y: 1, z: 0 },   // Top
   ];
 
-  for (let z = 0; z < chunkSize; z++) {
-    for (let y = 0; y < chunkSize; y++) {
+  for (let y = 0; y < chunkSize; y++) {
+    for (let z = 0; z < chunkSize; z++) {
       for (let x = 0; x < chunkSize; x++) {
-        const blk = grid[z][y][x];
+        const blk = grid[y][z][x];
         if (blk === "Air") continue;
         
         directions.forEach((dir, i) => {
@@ -119,11 +125,24 @@ function AddFaceToGeometry(x,y,z,dir,side){
   
 }
          
-function FillLayer(blockType){
-  const xGrid = Array(chunkSize).fill(
-          new Block(-chunkSize / 2, y - chunkSize / 2, -chunkSize / 2, blockType)
-        );
+function FillLayer(blockType,y){
+
+  let zGrid =[];
+  if (blockType === "Air"){
+    for (let z = 0; z < chunkSize; z++) {
+      const xGrid = Array(chunkSize).fill("Air");
       zGrid.push(xGrid);
+    }
+    return zGrid
+  }
+
+  for (let z = 0; z < chunkSize; z++) {
+    const xGrid = Array(chunkSize).fill(
+      new Block(-chunkSize / 2, y - chunkSize / 2, -chunkSize / 2, blockType)
+    );
+    zGrid.push(xGrid);
+  }
+  return zGrid
 }
 //this makes tree :)
 function GenTree(x,y,z){

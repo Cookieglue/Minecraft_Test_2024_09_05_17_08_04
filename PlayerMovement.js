@@ -1,7 +1,7 @@
 let mouseSensitivity = 0.00005
 let plrSpeed = 0.4
 
-let chunkSize = 64;
+var chunkSize = 32
 var plrX = chunkSize/2 * blockSize
 var plrY = 0
 var plrZ = chunkSize/2 * blockSize;

@@ -2,11 +2,11 @@ let solid, trans, ui
 
 var skyblue = '#56CCFF'
 
-let DIRT, STONE
+let DIRT, STONE, LOG
 
 function preload() {
   grassTexture = loadImage('textures/grass.jpg');
-  oakTexture = loadImage('textures/oak_log.png');
+  log = loadImage('textures/oak_log.png');
   leavesTexture = loadImage('textures/leaves.png');
   
   grass = loadImage('textures/grass.jpg');
@@ -17,11 +17,12 @@ function preload() {
   //west, south, east, north, top, bottom
   DIRT = [side,side,side,side,grass,dirt]
   STONE = [stone,stone,stone,stone,stone,stone]
+  LOG = [grass,grass,grass,grass,grass,grass]
 }
 
 function setup() {
   noCursor(); 
-  createCanvas(800, 450, WEBGL);
+  createCanvas(window.innerWidth, window.innerHeight, WEBGL);
   //solid = createGraphics(800, 450,WEBGL);
   //trans = createGraphics(800, 450,WEBGL);
   ui = createGraphics(800, 450);
