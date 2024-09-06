@@ -2,7 +2,12 @@ var grid = []
 var chunk
 var  chunkHeight = 32
 var airCutoff = 5
-var stoneCutoff = 35
+var stoneCutoff = 15
+var grassCenter = (airCutoff + stoneCutoff)/2
+
+const airStrength = (y)=>{Math.max(10-sq(airCutoff-y),0)}
+const grassStrength = (y)=>{Math.max(10-sq(grassCenter-y),0)}
+const stoneStrength = (y)=>{Math.max(10-sq(stoneCutoff-y),0)}
 
 let cubeList = [] ;//ns stands for noise sensitivity
 let ns = 0.1
@@ -55,7 +60,11 @@ function initializeChunk(){
       let xGrid = []
       for (var x = 0 ; x < chunkSize ; x++){
         
-        let blockType = DIRT
+        let blockType = GetBlock(x,y,z)
+        if (blockType == "Air"){
+          xGrid.push("Air")
+          continue
+        }
         xGrid.push(new Block(
           x-chunkSize/2,y-chunkSize/2,z-chunkSize/2, blockType
         ))
@@ -109,6 +118,19 @@ function buildChunk() {
   });
 }
 
+function GetBlock(x,y,z){
+  //air logic
+  let type;
+  let rand = noise(x*ns,z*ns)
+  if (y<grassCenter){
+    type = (rand<(grassCenter-y)/grassCenter)? "Air":DIRT;
+  }
+  else{
+    type = (rand<(y-grassCenter)/grassCenter)? STONE : DIRT;
+  }
+  return type
+}
+
 function AddFaceToGeometry(x,y,z,dir,side){
   face = new Plane(x,y,z,dir, side)
   //categorize by texture
@@ -144,14 +166,7 @@ function FillLayer(blockType,y){
   }
   return zGrid
 }
-function GetBlock(x,y,z){
-  var xPos = x*cs
-  var yPos = cs*round(4*noise(x*ns,z*ns))
-  var zPos = z * cs
 
-  if(yPos)
-
-}
 //this makes tree :)
 function GenTree(x,y,z){
   
