@@ -1,6 +1,6 @@
 var grid = []
 var chunk
-var  chunkHeight = 32
+const chunkHeight = 32
 var airCutoff = 5
 var stoneCutoff = 15
 var grassCenter = (airCutoff + stoneCutoff)/2
@@ -43,7 +43,7 @@ function GenWorld(){
 
 function initializeChunk(){
   
-  for (var y = 0 ; y < chunkSize ; y++){
+  for (var y = 0 ; y < chunkHeight ; y++){
 
     //upper cutoff
     if(y<airCutoff) {
@@ -86,7 +86,7 @@ function buildChunk() {
     { x: 0, y: 1, z: 0 },   // Top
   ];
 
-  for (let y = 0; y < chunkSize; y++) {
+  for (let y = 0; y < chunkHeight; y++) {
     for (let z = 0; z < chunkSize; z++) {
       for (let x = 0; x < chunkSize; x++) {
         const blk = grid[y][z][x];

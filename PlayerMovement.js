@@ -1,7 +1,8 @@
 let mouseSensitivity = 0.00005
 let plrSpeed = 0.4
+let cam
 
-var chunkSize = 32
+const chunkSize = 32
 var plrX = chunkSize/2 * blockSize
 var plrY = 0
 var plrZ = chunkSize/2 * blockSize;
@@ -10,42 +11,46 @@ var pitch = 0;
 
 //750
 
-function updateTransform(){
-  translate(0,0,750)
-  rotateY(yaw)
-  rotateX(pitch*cos(yaw))
-  rotateZ(pitch*sin(yaw))
-  translate(-plrX,-plrY,-plrZ)
-}
-
 function mouseMoved(){
-  yaw += movedX*mouseSensitivity*deltaTime
-  pitch =constrain(pitch-movedY*mouseSensitivity*deltaTime ,-1.57,1.57)
+  yaw -= movedX*mouseSensitivity*deltaTime
+  pitch =constrain(pitch+movedY*mouseSensitivity*deltaTime ,-1.4,1.4)
 }
 function mousePressed() {
     requestPointerLock()
 }
 
+function updateCamera(){
+  let newCam = createCamera();
+  newCam.setPosition(plrX,plrY,plrZ)
+  newCam.pan(yaw)
+  newCam.tilt(pitch)
+
+  cam.slerp(cam,newCam,0.1)
+}
+
 function playerMovement(){
   if(keyIsPressed){
-    if (key === 'w'){
-      plrZ -= plrSpeed * cos(yaw) * deltaTime
-      plrX += plrSpeed * sin(yaw) * deltaTime
+    if (key === 'w' || key === 'W'){
+      plrZ -= plrSpeed * cos(-yaw) * deltaTime
+      plrX += plrSpeed * sin(-yaw) * deltaTime
     }
-    if (key === 's'){
-      plrZ += plrSpeed * cos(yaw) * deltaTime
-      plrX -= plrSpeed * sin(yaw) * deltaTime
+    if (key === 's'|| key === 'S'){
+      plrZ += plrSpeed * cos(-yaw) * deltaTime
+      plrX -= plrSpeed * sin(-yaw) * deltaTime
     }
-    if (key === 'd'){
-      plrZ += plrSpeed * sin(yaw) * deltaTime
-      plrX += plrSpeed * cos(yaw) * deltaTime
+    if (key === 'd'|| key === 'D'){
+      plrZ += plrSpeed * sin(-yaw) * deltaTime
+      plrX += plrSpeed * cos(-yaw) * deltaTime
     }
-    if (key === 'a'){
-      plrZ -= plrSpeed * sin(yaw) * deltaTime
-      plrX -= plrSpeed * cos(yaw) * deltaTime
+    if (key === 'a'|| key === 'A'){
+      plrZ -= plrSpeed * sin(-yaw) * deltaTime
+      plrX -= plrSpeed * cos(-yaw) * deltaTime
     }
-    if (key==='SPACE_BAR'){
-      plrY -=plrSpeed;
+    if (key==='x'){
+      plrY -= plrSpeed * deltaTime;
+    }
+    if (key==='X'){
+      plrY += plrSpeed * deltaTime;
     }
     
   }
