@@ -4,7 +4,7 @@ var skyblue = '#56CCFF'
 let directionalBrightness = 200
 let ambientBrightness = 150
 
-let DIRT, STONE, LOG
+let GRASS, DIRT, STONE, LOG
 
 function preload() {
   grassTexture = loadImage('textures/grass.jpg');
@@ -17,7 +17,8 @@ function preload() {
   stone = loadImage('textures/stone.jpeg')
   
   //west, south, east, north, top, bottom
-  DIRT = [side,side,side,side,grass,dirt]
+  DIRT = [dirt,dirt,dirt,dirt,dirt,dirt]
+  GRASS = [side,side,side,side,grass,dirt]
   STONE = [stone,stone,stone,stone,stone,stone]
   LOG = [grass,grass,grass,grass,grass,grass]
 }

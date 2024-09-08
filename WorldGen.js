@@ -109,7 +109,12 @@ function GetBlock(x,y,z){
   let type;
   let rand = noise(x*ns,z*ns)
   if (y<grassCenter){
-    type = (rand<(grassCenter-y)/grassCenter)? "Air":DIRT;
+    if (rand<(grassCenter-y)/grassCenter){
+      type = "Air"
+    }
+    else{
+      type = (grid[y-1][z][x] == "Air")? GRASS : DIRT;
+    }
   }
   else{
     type = (rand<(y-grassCenter)/grassCenter)? STONE : DIRT;
