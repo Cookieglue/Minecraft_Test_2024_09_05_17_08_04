@@ -1,3 +1,12 @@
+const faceDir = [
+  { z: -blockSize/2 , theta: 0, phi: 0},  // West
+  { z: -blockSize/2  , theta: 1.571, phi: 0},  // South
+  { z: blockSize/2  , theta: 0, phi: 0},   // East
+  { z: blockSize/2  , theta: 1.571, phi: 0},   // North
+  { z:blockSize/2  , theta: 0, phi: 1.571},  // Bottom
+  { z:-blockSize/2  , theta: 0, phi: 1.571},   // Top
+];
+
 class Plane{
   constructor(x,y,z, dir,texture){
     this.x = x * blockSize
@@ -12,53 +21,17 @@ class Plane{
     this.dir = dir
     this.texture = texture
   }
+
   place(){
     push()
+    let temp_transform = faceDir[this.dir]
     translate(this.x,this.y,this.z)
-    switch (this.dir){
-      //West
-      case(0):
-        translate(0,0,-blockSize/2)   
-        break
-
-      //South
-      case(1):
-        rotateY(1.571)
-        translate(0, 0,-blockSize/2) 
-        break 
-
-      //East
-      case(2):
-        translate(0,0,blockSize/2)
-        break
-
-
-      //North
-      case(3):
-        rotateY(1.571)
-        translate(0, 0, blockSize/2) 
-        break
-
-
-      //Bottom
-      case(4):
-        translate(0, -blockSize/2, 0)
-        rotateX(1.571) 
-        break
-
-      //Top
-      case(5):
-        translate(0, blockSize/2, 0)
-        rotateX(1.571) 
-        break 
-
-
-      default:
-        break
-    
-  }
+    rotateY(temp_transform.theta)
+    rotateX(temp_transform.phi)
+    translate(0,0,temp_transform.z)
     plane(blockSize);
     pop()
+    
   }
   
 }

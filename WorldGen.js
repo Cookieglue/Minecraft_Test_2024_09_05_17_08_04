@@ -9,6 +9,7 @@ const airStrength = (y)=>{Math.max(10-sq(airCutoff-y),0)}
 const grassStrength = (y)=>{Math.max(10-sq(grassCenter-y),0)}
 const stoneStrength = (y)=>{Math.max(10-sq(stoneCutoff-y),0)}
 
+
 let cubeList = [] ;//ns stands for noise sensitivity
 let ns = 0.1
 
@@ -85,7 +86,7 @@ function buildChunk() {
     { x: 0, y: -1, z: 0 },  // Bottom
     { x: 0, y: 1, z: 0 },   // Top
   ];
-
+ //cull faces
   for (let y = 0; y < chunkHeight; y++) {
     for (let z = 0; z < chunkSize; z++) {
       for (let x = 0; x < chunkSize; x++) {
@@ -114,9 +115,13 @@ function buildChunk() {
     const builtMesh = buildGeometry(() => {
       textureGroup.forEach(face => face.place());
     });
+    builtMesh.computeNormals(SMOOTH);
     builtMeshes.set(tex, builtMesh);
   });
 }
+
+
+
 
 function GetBlock(x,y,z){
   //air logic
@@ -143,7 +148,6 @@ function AddFaceToGeometry(x,y,z,dir,side){
   else buffer = [face]
   //update meshgroup
   meshGroup.set(side,buffer)
-  print(meshGroup.get(side))
   
 }
          

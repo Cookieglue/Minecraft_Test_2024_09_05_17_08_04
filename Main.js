@@ -35,16 +35,20 @@ function setup() {
 }
 
 function draw() {
-  noStroke()
+  stroke(0,0,0)
   background(skyblue);
-  directionalLight(lightCol, 0.5, 1, 0.5)
-  ambientLight(lightCol, 0.005)
+
+  directionalLight(255,255,255, 1, 1, 1)
+  //ambientLight(lightCol, 0.005)
 
   updateCamera();
+  texture(log)
+  sphere(100,100)
   
   builtMeshes.forEach((mesh, tex) => {
     texture(tex)
     model(mesh)
+
   })
   
   
