@@ -1,7 +1,7 @@
 var grid = []
 var chunk
 const chunkHeight = 32
-var airCutoff = 5
+var airCutoff = 1
 var stoneCutoff = 15
 var grassCenter = (airCutoff + stoneCutoff)/2
 
@@ -21,25 +21,6 @@ let builtMeshes = new Map()
 function GenWorld(){
   initializeChunk();
   buildChunk();
-  /**
-  for (var x = -chunkSize ; x <= chunkSize ; x++ ){
-    for (var z = -chunkSize ; z <= chunkSize ; z++ ){
-      
-      var xpos = x*cs
-      var ypos = cs*round(4*noise(x*ns,z*ns))
-      var zpos = z * cs
-      
-      cubeList.push(
-        new Cube(xpos,ypos,zpos,cs,cs,cs, grassTexture)
-      );
-        
-        if (random(0,100) > 99.5){
-          GenTree(xpos,ypos,zpos);
-        }
-        
-    }
-  }
-  **/
 }
 
 function initializeChunk(){
@@ -100,7 +81,7 @@ function buildChunk() {
 
           if (
             neighborX < 0 || neighborX >= chunkSize ||
-            neighborY < 0 || neighborY >= chunkSize ||
+            neighborY < 0 || neighborY >= chunkHeight ||
             neighborZ < 0 || neighborZ >= chunkSize ||
             grid[neighborY]?.[neighborZ]?.[neighborX] === "Air"
           ) {
@@ -115,7 +96,7 @@ function buildChunk() {
     const builtMesh = buildGeometry(() => {
       textureGroup.forEach(face => face.place());
     });
-    builtMesh.computeNormals(SMOOTH);
+    //builtMesh.computeNormals(SMOOTH);
     builtMeshes.set(tex, builtMesh);
   });
 }

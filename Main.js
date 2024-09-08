@@ -1,7 +1,8 @@
 let solid, trans, ui
 
 var skyblue = '#56CCFF'
-let lightCol;
+let directionalBrightness = 200
+let ambientBrightness = 150
 
 let DIRT, STONE, LOG
 
@@ -25,7 +26,6 @@ function setup() {
   noCursor(); 
   createCanvas(window.innerWidth, window.innerHeight, WEBGL);
   cam = createCamera(plrX,plrY,plrZ)
-  lightCol = color(227, 245, 255)
   //solid = createGraphics(800, 450,WEBGL);
   //trans = createGraphics(800, 450,WEBGL);
   ui = createGraphics(800, 450);
@@ -35,17 +35,16 @@ function setup() {
 }
 
 function draw() {
-  stroke(0,0,0)
+  noStroke()
   background(skyblue);
 
-  directionalLight(255,255,255, 1, 1, 1)
-  //ambientLight(lightCol, 0.005)
+  directionalLight(directionalBrightness*0.95,directionalBrightness*0.95,directionalBrightness, 1, 1, 0.5)
+  ambientLight(ambientBrightness, 1)
 
   updateCamera();
-  texture(log)
-  sphere(100,100)
   
   builtMeshes.forEach((mesh, tex) => {
+    noStroke()
     texture(tex)
     model(mesh)
 

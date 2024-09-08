@@ -1,10 +1,10 @@
 const faceDir = [
-  { z: -blockSize/2 , theta: 0, phi: 0},  // West
-  { z: -blockSize/2  , theta: 1.571, phi: 0},  // South
+  { z: blockSize/2 , theta: 3.1416, phi: 0},  // West
+  { z: blockSize/2  , theta: -1.571, phi: 0},  // South
   { z: blockSize/2  , theta: 0, phi: 0},   // East
   { z: blockSize/2  , theta: 1.571, phi: 0},   // North
-  { z:blockSize/2  , theta: 0, phi: 1.571},  // Bottom
-  { z:-blockSize/2  , theta: 0, phi: 1.571},   // Top
+  { z: blockSize/2  , theta: 0, phi: 1.571},  // Top
+  { z: blockSize/2  , theta: 0, phi: -1.571},   // Bottom
 ];
 
 class Plane{
