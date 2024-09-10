@@ -1,8 +1,6 @@
-var grid = []
 var chunk
-const chunkHeight = 32
 var airCutoff = 1
-var stoneCutoff = 15
+var stoneCutoff = 25
 var grassCenter = (airCutoff + stoneCutoff)/2
 
 const airStrength = (y)=>{Math.max(10-sq(airCutoff-y),0)}
@@ -13,14 +11,10 @@ const stoneStrength = (y)=>{Math.max(10-sq(stoneCutoff-y),0)}
 let cubeList = [] ;//ns stands for noise sensitivity
 let ns = 0.1
 
-//map [texture->meshes]
-let meshGroup = new Map()
-//map [texture->single large mesh]
-let builtMeshes = new Map()
-
 function GenWorld(){
-  initializeChunk();
-  buildChunk();
+  chunk = new Chunk()
+  chunk.initializeChunk();
+  chunk.buildChunk();
 }
 
 function initializeChunk(){
@@ -100,64 +94,6 @@ function buildChunk() {
     builtMeshes.set(tex, builtMesh);
   });
 }
-
-
-
-
-function GetBlock(x,y,z){
-  //air logic
-  let type;
-  let rand = noise(x*ns,z*ns)
-  if (y<grassCenter){
-    if (rand<(grassCenter-y)/grassCenter){
-      type = "Air"
-    }
-    else{
-      type = (grid[y-1][z][x] == "Air")? GRASS : DIRT;
-    }
-  }
-  else{
-    type = (rand<(y-grassCenter)/grassCenter)? STONE : DIRT;
-  }
-  return type
-}
-
-function AddFaceToGeometry(x,y,z,dir,side){
-  face = new Plane(x,y,z,dir, side)
-  //categorize by texture
-  buffer = meshGroup.get(side)
-  
-  //start a new buffer if using a new texture
-  if (buffer != undefined){
-    buffer.push(face)
-  }
-  else buffer = [face]
-  //update meshgroup
-  meshGroup.set(side,buffer)
-  
-}
-         
-function FillLayer(blockType,y){
-
-  let zGrid =[];
-  if (blockType === "Air"){
-    for (let z = 0; z < chunkSize; z++) {
-      const xGrid = Array(chunkSize).fill("Air");
-      zGrid.push(xGrid);
-    }
-    return zGrid
-  }
-
-  for (let z = 0; z < chunkSize; z++) {
-    const xGrid = Array(chunkSize).fill(
-      new Block(-chunkSize / 2, y - chunkSize / 2, -chunkSize / 2, blockType)
-    );
-    zGrid.push(xGrid);
-  }
-  return zGrid
-}
-
-//this makes tree :)
 function GenTree(x,y,z){
   
   let treeHeight = round(random(3,4))

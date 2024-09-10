@@ -6,6 +6,9 @@ let ambientBrightness = 150
 
 let GRASS, DIRT, STONE, LOG
 
+const chunkHeight = 4
+const chunkSize = 4
+
 function preload() {
   grassTexture = loadImage('textures/grass.jpg');
   log = loadImage('textures/oak_log.png');
@@ -44,7 +47,7 @@ function draw() {
 
   updateCamera();
   
-  builtMeshes.forEach((mesh, tex) => {
+  chunk.builtMeshes.forEach((mesh, tex) => {
     noStroke()
     texture(tex)
     model(mesh)
