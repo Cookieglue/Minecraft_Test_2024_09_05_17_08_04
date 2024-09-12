@@ -6,8 +6,10 @@ let ambientBrightness = 150
 
 let GRASS, DIRT, STONE, LOG
 
-const chunkHeight = 4
-const chunkSize = 4
+const chunkHeight = 32
+const chunkSize = 32
+
+var player;
 
 function preload() {
   grassTexture = loadImage('textures/grass.jpg');
@@ -30,11 +32,15 @@ function setup() {
   noCursor(); 
   createCanvas(window.innerWidth, window.innerHeight, WEBGL);
   cam = createCamera(plrX,plrY,plrZ)
+  //60 deg fov
+  cam.perspective(1.047, width/height, 1, 8000)
   //solid = createGraphics(800, 450,WEBGL);
   //trans = createGraphics(800, 450,WEBGL);
   ui = createGraphics(800, 450);
   drawCrossHair()
   GenWorld()
+
+  player = new DynamicCollider(plrX,plrY,plrZ, 10,20,10,  yaw , pitch)
   
 }
 

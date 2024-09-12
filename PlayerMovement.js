@@ -2,6 +2,8 @@ let mouseSensitivity = 0.00005
 let plrSpeed = 0.4
 let cam
 
+let keysPressed = []
+
 var plrX = chunkSize/2 * blockSize
 var plrY = 0
 var plrZ = chunkSize/2 * blockSize;
@@ -28,29 +30,27 @@ function updateCamera(){
 }
 
 function playerMovement(){
-  if(keyIsPressed){
-    if (key === 'w' || key === 'W'){
-      plrZ -= plrSpeed * cos(-yaw) * deltaTime
-      plrX += plrSpeed * sin(-yaw) * deltaTime
-    }
-    if (key === 's'|| key === 'S'){
-      plrZ += plrSpeed * cos(-yaw) * deltaTime
-      plrX -= plrSpeed * sin(-yaw) * deltaTime
-    }
-    if (key === 'd'|| key === 'D'){
-      plrZ += plrSpeed * sin(-yaw) * deltaTime
-      plrX += plrSpeed * cos(-yaw) * deltaTime
-    }
-    if (key === 'a'|| key === 'A'){
-      plrZ -= plrSpeed * sin(-yaw) * deltaTime
-      plrX -= plrSpeed * cos(-yaw) * deltaTime
-    }
-    if (key==='x'){
-      plrY -= plrSpeed * deltaTime;
-    }
-    if (key==='X'){
-      plrY += plrSpeed * deltaTime;
-    }
-    
+
+  player.resetDirection()
+  if (keyIsDown(87)){
+    player.setDirection("forward")
   }
+  if (keyIsDown(83)){
+    player.setDirection("backward")
+  }
+  if (keyIsDown(65)){
+    player.setDirection("left")
+  }
+  if (keyIsDown(68)){
+    player.setDirection("right")
+  }
+  player.move()
+
+  if (keyIsDown(88)){
+    player.pos.y -= plrSpeed * deltaTime;
+  }
+  if (keyIsDown(90)){
+    player.pos.y += plrSpeed * deltaTime;
+  }
+    
 }
