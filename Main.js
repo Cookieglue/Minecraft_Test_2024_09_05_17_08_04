@@ -41,6 +41,7 @@ function setup() {
   GenWorld()
 
   player = new DynamicCollider(plrX,plrY,plrZ, 10,20,10,  yaw , pitch)
+  hitboxes = [new BoxCollider(0,200,0,100,100,100)]
   
 }
 
@@ -59,6 +60,12 @@ function draw() {
     model(mesh)
 
   })
+
+  push()
+  translate(0, 100, 0)
+  fill(255,0,0)
+  box(100,100,100)
+  pop()
   
   
   //image(solid,-width/2,-height/2)

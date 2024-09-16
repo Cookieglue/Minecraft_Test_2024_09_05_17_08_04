@@ -1,3 +1,5 @@
+//a list of all STATIC hitboxes
+let hitboxes = []
 
 class BoxCollider {
 
@@ -39,9 +41,23 @@ class DynamicCollider extends BoxCollider{
         
         this.vel.mult(plrSpeed*deltaTime)
 
-        this.pos.sub(this.vel)
+        this.checkCollision()
         plrX = this.pos.x
         plrY = this.pos.y
         plrZ = this.pos.z
+    }
+
+    checkCollision(){
+
+        hitboxes.forEach((col)=>{
+            let newPos = this.pos.copy();
+            newPos.sub(this.vel)
+            newPos.sub(col.pos)
+            let dist = newPos.mag()
+            print(dist*dist)
+            if ( dist*dist > 15000 ) this.pos.sub(this.vel)
+
+        })
+
     }
 }
