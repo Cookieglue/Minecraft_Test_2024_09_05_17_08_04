@@ -41,7 +41,8 @@ function setup() {
   GenWorld()
 
   player = new DynamicCollider(plrX,plrY,plrZ, 20,20,20,  yaw , pitch)
-  hitboxes = [new BoxCollider(0,100,0,100,100,100)]
+  hitboxes = [new BoxCollider(0,100,0,100,100,100),new BoxCollider(400,100,400,100,100,100)
+  ]
   
 }
 
@@ -64,6 +65,12 @@ function draw() {
   push()
   translate(0, 100, 0)
   fill(255,0,0)
+  box(100,100,100)
+  pop()
+
+  push()
+  translate(400, 100, 400)
+  fill(0,0,255)
   box(100,100,100)
   pop()
   

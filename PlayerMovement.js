@@ -10,7 +10,6 @@ var plrZ = chunkSize/2 * blockSize;
 var yaw = 0;
 var pitch = 0;
 
-//750
 
 function mouseMoved(){
   yaw -= movedX*mouseSensitivity*deltaTime
@@ -44,13 +43,13 @@ function playerMovement(){
   if (keyIsDown(68)){
     player.setDirection("right")
   }
-  player.move()
 
   if (keyIsDown(88)){
-    player.pos.y -= plrSpeed * deltaTime;
+    player.setDirection("down")
   }
   if (keyIsDown(90)){
-    player.pos.y += plrSpeed * deltaTime;
+    player.setDirection("up")
   }
+  player.move()
     
 }

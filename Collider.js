@@ -29,6 +29,8 @@ class DynamicCollider extends BoxCollider{
         if (dir=="backward")this.relativeVel.z = -1
         if (dir=="left")this.relativeVel.x = 1
         if (dir=="right")this.relativeVel.x = -1
+        if (dir=="down")this.relativeVel.y = -1
+        if (dir=="up")this.relativeVel.y = 1
     }
 
     move(){
@@ -37,7 +39,7 @@ class DynamicCollider extends BoxCollider{
 
         //use 2d rotation matrix
         this.vel = createVector(this.relativeVel.x*cos(-yaw) - this.relativeVel.z*sin(-yaw),
-        0
+        this.relativeVel.y
         ,this.relativeVel.x*sin(-yaw) + this.relativeVel.z*cos(-yaw))
         
         this.vel.mult(plrSpeed*deltaTime)
@@ -53,69 +55,58 @@ class DynamicCollider extends BoxCollider{
         let storeTimes = []
 
         hitboxes.forEach((col)=>{
+
+            let pos = this.pos.array()
+            let size = this.size.array()
+            let vel = this.vel.array()
+
+            let colPos = col.pos.array()
+            let colSize = col.size.array()
+
+
             let distVec = this.pos.copy();
             distVec.sub(this.vel).sub(this.pos)
             let dist = distVec.mag()
-           
+
             //get distance
-            let xEntryDist, xExitDist;
-            let zEntryDist, zExitDist;
+            let entryDist = [0,0,0]
+            let exitDist = [0,0,0];
+            let entryTimes = [0,0,0]
+            let exitTimes = [0,0,0]
+            for (let i = 0 ; i <3 ; i++){
+                //get distance
+                if (vel[i] > 0) 
+                { 
+                    entryDist[i] = pos[i] - (colPos[i] + colSize[i]);  
+                    exitDist[i] = (pos[i] + size[i]) - colPos[i];
+                }
+                else 
+                { 
+                    entryDist[i] = (pos[i]+ size[i]) - colPos[i];  
+                    exitDist[i] = pos[i]- (colPos[i] + colSize[i]);  
+                } 
+                // find time of collision and time of leaving for each axis (if statement is to prevent divide by zero) 
+                if (vel[i] == 0.) 
+                { 
+                    entryTimes[i] = -infinity; 
+                    exitTimes[i] = infinity; 
+                } 
+                else 
+                { 
+                    entryTimes[i] = entryDist[i] / vel[i]; 
+                    exitTimes[i] = exitDist[i] / vel[i]; 
+                } 
 
-            if (this.vel.x > 0) 
-            { 
-                xEntryDist = this.pos.x - (col.pos.x + col.size.x);  
-                xExitDist = (this.pos.x + this.size.x) - col.pos.x;
             }
-            else 
-            { 
-                xEntryDist = (this.pos.x + this.size.x) - col.pos.x;  
-                xExitDist = this.pos.x - (col.pos.x + col.size.x);  
-            } 
-            
-            if (this.vel.z > 0) 
-            { 
-                zEntryDist = this.pos.z - (col.pos.z + col.size.z);  
-                zExitDist = (this.pos.z + this.size.z) - col.pos.z;  
-            }
-            else 
-            { 
-                zEntryDist = (this.pos.z + this.size.z) - col.pos.z;  
-                zExitDist = this.pos.z - (col.pos.z + col.size.z);  
-            }
-
-            // find time of collision and time of leaving for each axis (if statement is to prevent divide by zero) 
-            let xEntry, zEntry; 
-            let xExit, zExit; 
-
-            if (this.vel.x == 0.) 
-            { 
-                xEntry = infinity; 
-                xExit = infinity-1; 
-            } 
-            else 
-            { 
-                xEntry = xEntryDist / this.vel.x; 
-                xExit = xExitDist / this.vel.x; 
-            } 
-
-            if (this.vel.z == 0) 
-            { 
-                zEntry = infinity 
-                zExit = infinity - 1
-            } 
-            else 
-            { 
-                zEntry = zEntryDist / this.vel.z; 
-                zExit = zExitDist / this.vel.z; 
-            }
-
+            //entryTimes[1] = 0
             // find the earliest/latest times of collision
-            let entryTime = Math.max(xEntry, zEntry); 
-            let exitTime = Math.min(xExit, zExit);
+            let entryTime = max(entryTimes); 
+            print(entryTime)
+            let exitTime = min(exitTimes);
             let collisionTime;
 
             // if there was no collision, then we travel the entire frame
-            if (entryTime > exitTime || xEntry < 0 && zEntry < 0 || xEntry > 1 || zEntry > 1) 
+            if (entryTime > exitTime || entryTime < 0 || entryTimes[0] > 1 ||  entryTimes[1] > 1 || entryTimes[2] > 1) 
             { 
                 collisionTime = 1;
             }
@@ -123,10 +114,9 @@ class DynamicCollider extends BoxCollider{
                 collisionTime = entryTime
             }
             append(storeTimes,collisionTime)
-            print(xEntry,xExit,zEntry,zEntry)
         })
-
-        let moveTime = Math.min(storeTimes)
+        
+        let moveTime = min(storeTimes)
         this.vel.mult(moveTime)
         this.pos.sub(this.vel)
 
