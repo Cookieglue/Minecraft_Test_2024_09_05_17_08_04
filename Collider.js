@@ -5,7 +5,7 @@ const  infinity = 65536
 class BoxCollider {
 
     constructor(x,y,z, l,w,h){
-        this.pos = createVector(x,y,z)
+        this.pos = createVector(x-l/2,y-w/2,z-h/2)
         this.size = createVector(l,w,h)
     }
 
@@ -43,9 +43,9 @@ class DynamicCollider extends BoxCollider{
         this.vel.mult(plrSpeed*deltaTime)
 
         this.checkCollision()
-        plrX = this.pos.x
-        plrY = this.pos.y
-        plrZ = this.pos.z
+        plrX = this.pos.x + this.size.x/2
+        plrY = this.pos.y + this.size.y/2
+        plrZ = this.pos.z + this.size.z/2
     }
 
     checkCollision(){

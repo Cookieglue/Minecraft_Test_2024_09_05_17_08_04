@@ -40,8 +40,8 @@ function setup() {
   drawCrossHair()
   GenWorld()
 
-  player = new DynamicCollider(plrX,plrY,plrZ, 10,20,10,  yaw , pitch)
-  hitboxes = [new BoxCollider(50,50,50,100,100,100)]
+  player = new DynamicCollider(plrX,plrY,plrZ, 20,20,20,  yaw , pitch)
+  hitboxes = [new BoxCollider(0,100,0,100,100,100)]
   
 }
 
